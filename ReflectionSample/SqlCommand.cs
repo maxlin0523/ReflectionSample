@@ -26,7 +26,7 @@ namespace ReflectionSample
             var column = string.Join(",", data);
 
             // 欄位參數
-            var values = string.Join(",", data.Select(x => $"@{x}"));
+            var values = string.Join(",", data.Select(x => $"@{x} "));
 
             var table = type.Name;
 
@@ -94,7 +94,7 @@ namespace ReflectionSample
 
             // 遍歷陣列取得欄位並加入內存
             var data = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
+                .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
 
             // 條件式內存
             var condition = new List<string>();
