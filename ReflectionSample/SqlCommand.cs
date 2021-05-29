@@ -85,8 +85,8 @@ namespace ReflectionSample
             var sql = new StringBuilder();
             sql.AppendLine($"UPDATE dbo.{table}");
             sql.AppendLine($"SET");
-            sql.AppendLine($"{column}");
-            sql.AppendLine($"{where}");
+            sql.AppendLine(column);
+            sql.AppendLine(where);
             return sql.ToString();
         }
 
@@ -127,9 +127,9 @@ namespace ReflectionSample
             // 組裝
             var sql = new StringBuilder();
             sql.AppendLine("SELECT");
-            sql.AppendLine($"{column}");
+            sql.AppendLine(column);
             sql.AppendLine($"FROM dbo.{table}");
-            sql.AppendLine($"{where}");
+            sql.AppendLine(where);
             return sql.ToString();
         }
 
@@ -162,7 +162,7 @@ namespace ReflectionSample
             // 組裝
             var sql = new StringBuilder();
             sql.AppendLine($"DELETE FROM dbo.{table}");
-            sql.AppendLine($"{where}");
+            sql.AppendLine(where);
             return sql.ToString();
         }
     }
