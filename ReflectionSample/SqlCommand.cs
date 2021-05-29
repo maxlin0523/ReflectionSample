@@ -18,15 +18,19 @@ namespace ReflectionSample
         {
             var type = typeof(T);
 
+            var props = type.GetProperties();
             // 遍歷陣列取得欄位、欄位值加入內存
-            var data = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
+            var data = props.Select(prop => 
+                $"{prop.Name} ");
+
+            var values = props.Select(prop =>
+                $"@{prop.Name} ");
 
             // 欄位
             var column = string.Join(",", data);
 
             // 欄位參數
-            var values = string.Join(",", data.Select(x => $"@{x} "));
+            var value = string.Join(",", values);
 
             var table = type.Name;
 
@@ -35,7 +39,7 @@ namespace ReflectionSample
             sql.AppendLine($"INSERT INTO dbo.{table}");
             sql.AppendLine($"( {column} )");
             sql.AppendLine($"VALUES");
-            sql.AppendLine($"( {values} )");
+            sql.AppendLine($"( {value} )");
             return sql.ToString();
         }
 
@@ -48,7 +52,7 @@ namespace ReflectionSample
 
             // 遍歷陣列取得欄位並組裝加入內存
             var data = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
+                .Select(prop => $"{prop.Name} = @{prop.Name} ");
 
             // 條件式內存
             var condition = new List<string>();
@@ -62,7 +66,7 @@ namespace ReflectionSample
                     .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
 
                 // 不需要再把條件式欄位也update，故從內存中排除
-                data = data.Except(condition).ToList();
+                data = data.Except(condition);
 
                 // 條件式前面需加入WHERE
                 condition[0] = $"WHERE {condition[0]} ";
@@ -94,7 +98,7 @@ namespace ReflectionSample
 
             // 遍歷陣列取得欄位並加入內存
             var data = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
+                .Select(prop => $"{prop.Name} = @{prop.Name} ");
 
             // 條件式內存
             var condition = new List<string>();
