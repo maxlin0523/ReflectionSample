@@ -21,17 +21,17 @@ namespace ReflectionSample
             var props = type.GetProperties();
 
             // 遍歷陣列取得欄位、欄位值加入內存
-            var columns = props.Select(prop => 
-                $"{prop.Name} ");
+            var columns = props.Select(prop =>
+                prop.Name);
 
             var values = props.Select(prop =>
-                $"@{prop.Name} ");
+                $"@{prop.Name}");
 
             // 欄位
-            var column = string.Join(",", columns);
+            var column = string.Join(", ", columns);
 
             // 欄位參數
-            var value = string.Join(",", values);
+            var value = string.Join(", ", values);
 
             var table = type.Name;
 
@@ -53,7 +53,7 @@ namespace ReflectionSample
 
             // 遍歷陣列取得欄位並組裝加入內存
             var columns = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name} ");
+                .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
 
             // 條件式內存
             var condition = new List<string>();
@@ -64,17 +64,17 @@ namespace ReflectionSample
                 // 遍歷陣列取得條件式並組裝加入條件式內存
                 condition = conditionalParam.GetType()
                     .GetProperties()
-                    .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
+                    .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
 
-                // 不需要再把條件式欄位也update，故從欄位內存中排除
-                columns = columns.Except(condition);
+                // 不需要再把條件式欄位也update，故從更新欄位內存中排除
+                columns = columns.Except(condition).ToList();
 
                 // 條件式前面需加入WHERE
                 condition[0] = $"WHERE {condition[0]} ";
             }
 
             // 欄位
-            var column = string.Join(",", columns);
+            var column = string.Join(", ", columns);
 
             // 條件式
             var where = string.Join("AND ", condition);
@@ -99,7 +99,7 @@ namespace ReflectionSample
 
             // 遍歷陣列取得欄位並加入內存
             var columns = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name} ");
+                .Select(prop => prop.Name);
 
             // 條件式內存
             var condition = new List<string>();
@@ -110,14 +110,14 @@ namespace ReflectionSample
                 // 遍歷陣列取得條件式並組裝加入條件式內存
                 condition = conditionalParam.GetType()
                     .GetProperties()
-                    .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
+                    .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
 
                 // 條件式前面需加入WHERE
                 condition[0] = $"WHERE {condition[0]} ";
             }
 
             // 欄位
-            var column = string.Join(",", columns);
+            var column = string.Join(", ", columns);
 
             // 條件式
             var where = string.Join("AND ", condition);
@@ -148,7 +148,7 @@ namespace ReflectionSample
                 // 遍歷陣列取得條件式並組裝加入條件式內存
                 condition = conditionalParam.GetType()
                     .GetProperties()
-                    .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
+                    .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
 
                 // 條件式前面需加入WHERE
                 condition[0] = "WHERE " + condition[0];
