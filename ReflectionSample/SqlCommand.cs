@@ -9,7 +9,7 @@ namespace ReflectionSample
     /// <summary>
     /// 類別反射出SQL語法 預設class name為table name
     /// </summary>
-    public static class SqlCommand
+    public class SqlCommand
     {
         /// <summary>
         /// Insert語法組裝
@@ -19,15 +19,16 @@ namespace ReflectionSample
             var type = typeof(T);
 
             var props = type.GetProperties();
+
             // 遍歷陣列取得欄位、欄位值加入內存
-            var data = props.Select(prop => 
+            var columns = props.Select(prop => 
                 $"{prop.Name} ");
 
             var values = props.Select(prop =>
                 $"@{prop.Name} ");
 
             // 欄位
-            var column = string.Join(",", data);
+            var column = string.Join(",", columns);
 
             // 欄位參數
             var value = string.Join(",", values);
@@ -46,34 +47,34 @@ namespace ReflectionSample
         /// <summary>
         /// Update語法組裝
         /// </summary>
-        public static string Update<T>(object updateParam = null) where T : class
+        public static string Update<T>(object conditionalParam = null) where T : class
         {
             var type = typeof(T);
 
             // 遍歷陣列取得欄位並組裝加入內存
-            var data = type.GetProperties()
+            var columns = type.GetProperties()
                 .Select(prop => $"{prop.Name} = @{prop.Name} ");
 
             // 條件式內存
             var condition = new List<string>();
 
             // 檢查有無條件式參數
-            if (updateParam != null)
+            if (conditionalParam != null)
             {
                 // 遍歷陣列取得條件式並組裝加入條件式內存
-                condition = updateParam.GetType()
+                condition = conditionalParam.GetType()
                     .GetProperties()
                     .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
 
-                // 不需要再把條件式欄位也update，故從內存中排除
-                data = data.Except(condition);
+                // 不需要再把條件式欄位也update，故從欄位內存中排除
+                columns = columns.Except(condition);
 
                 // 條件式前面需加入WHERE
                 condition[0] = $"WHERE {condition[0]} ";
             }
 
             // 欄位
-            var column = string.Join(",", data);
+            var column = string.Join(",", columns);
 
             // 條件式
             var where = string.Join("AND ", condition);
@@ -92,22 +93,22 @@ namespace ReflectionSample
         /// <summary>
         /// Select語法組裝
         /// </summary>
-        public static string Select<T>(object selectParam = null) where T : class
+        public static string Select<T>(object conditionalParam = null) where T : class
         {
             var type = typeof(T);
 
             // 遍歷陣列取得欄位並加入內存
-            var data = type.GetProperties()
+            var columns = type.GetProperties()
                 .Select(prop => $"{prop.Name} = @{prop.Name} ");
 
             // 條件式內存
             var condition = new List<string>();
 
             // 檢查有無條件式參數
-            if (selectParam != null)
+            if (conditionalParam != null)
             {
                 // 遍歷陣列取得條件式並組裝加入條件式內存
-                condition = selectParam.GetType()
+                condition = conditionalParam.GetType()
                     .GetProperties()
                     .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
 
@@ -116,7 +117,7 @@ namespace ReflectionSample
             }
 
             // 欄位
-            var column = string.Join(",", data);
+            var column = string.Join(",", columns);
 
             // 條件式
             var where = string.Join("AND ", condition);
@@ -135,17 +136,17 @@ namespace ReflectionSample
         /// <summary>
         /// Delete語法組裝
         /// </summary>
-        public static string Delete<T>(object deleteParam = null) where T : class
+        public static string Delete<T>(object conditionalParam = null) where T : class
         {
             var type = typeof(T);
             // 條件式內存
             var condition = new List<string>();
 
             // 表示有條件式參數
-            if (deleteParam != null)
+            if (conditionalParam != null)
             {
                 // 遍歷陣列取得條件式並組裝加入條件式內存
-                condition = deleteParam.GetType()
+                condition = conditionalParam.GetType()
                     .GetProperties()
                     .Select(prop => $"{prop.Name} = @{prop.Name} ").ToList();
 
