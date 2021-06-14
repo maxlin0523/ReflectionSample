@@ -7,24 +7,27 @@ namespace ReflectionSample
     {
         static void Main(string[] args)
         {
-            // 新增
+            var param = new NBA();
+
+            Console.WriteLine("新增");
             var post = SqlCommand.Insert<NBA>();
             Console.WriteLine(post);
-            Console.WriteLine("---------------------------------------------------");
 
-            // 查詢
+
+            Console.WriteLine("查詢");
             var get = SqlCommand.Select<NBA>();
             Console.WriteLine(get);
-            Console.WriteLine("---------------------------------------------------");
 
-            // 修改
-            var put = SqlCommand.Update<NBA>(new { new NBA().PlayerName, new NBA().PlayerNumber });
+
+            Console.WriteLine("修改");
+            var put = SqlCommand.Update<NBA>(new { param.PlayerName, param.PlayerNumber });
             Console.WriteLine(put);
-            Console.WriteLine("---------------------------------------------------");
 
-            // 刪除
-            var delete = SqlCommand.Delete<NBA>(new { new NBA().PlayerName });
+
+            Console.WriteLine("刪除");
+            var delete = SqlCommand.Delete<NBA>(new { param.PlayerName });
             Console.WriteLine(delete);
+
 
             Console.ReadKey();
         }
