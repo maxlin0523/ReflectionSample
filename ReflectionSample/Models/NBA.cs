@@ -15,7 +15,5 @@ namespace ReflectionSample.Models
         public string LeagueTeam { get; set; }
 
         public string Position { get; set; }
-
-
     }
 }

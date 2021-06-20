@@ -52,13 +52,15 @@ namespace ReflectionSample
         /// <summary>
         /// Update語法組裝
         /// </summary>
-        public static string Update<T>(object param = null) where T : class
+        public static string Update<T>(object param = null) 
+            where T : class
         {
             var type = typeof(T);
 
             // 取得欄位並組裝加入內存
             var columns = type.GetProperties()
-                .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
+                .Select(prop => $"{prop.Name} = @{prop.Name}")
+                .ToList();
 
             // 條件式內存
             var conditions = new List<string>();
@@ -69,7 +71,8 @@ namespace ReflectionSample
                 // 取得條件式並組裝加入條件式內存
                 conditions = param.GetType()
                     .GetProperties()
-                    .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
+                    .Select(prop => $"{prop.Name} = @{prop.Name}")
+                    .ToList();
 
                 // 條件式參數不需更新，故排除
                 columns = columns.Except(conditions).ToList();
@@ -98,7 +101,8 @@ namespace ReflectionSample
         /// <summary>
         /// Select語法組裝
         /// </summary>
-        public static string Select<T>(object param = null) where T : class
+        public static string Select<T>(object param = null) 
+            where T : class
         {
             var type = typeof(T);
 
@@ -115,7 +119,8 @@ namespace ReflectionSample
                 // 取得條件式並組裝加入條件式內存
                 conditions = param.GetType()
                     .GetProperties()
-                    .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
+                    .Select(prop => $"{prop.Name} = @{prop.Name}")
+                    .ToList();
 
                 // 條件式前加上WHERE
                 conditions[0] = $"WHERE {conditions[0]}";
@@ -139,7 +144,8 @@ namespace ReflectionSample
         /// <summary>
         /// Delete語法組裝
         /// </summary>
-        public static string Delete<T>(object param = null) where T : class
+        public static string Delete<T>(object param = null) 
+            where T : class
         {
             var type = typeof(T);
 
@@ -152,7 +158,8 @@ namespace ReflectionSample
                 // 取得條件式並組裝加入條件式內存
                 conditions = param.GetType()
                     .GetProperties()
-                    .Select(prop => $"{prop.Name} = @{prop.Name}").ToList();
+                    .Select(prop => $"{prop.Name} = @{prop.Name}")
+                    .ToList();
 
                 // 條件式前加上WHERE
                 conditions[0] = "WHERE " + conditions[0];
